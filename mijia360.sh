@@ -19,7 +19,7 @@ case $i in
     SOURCE="${i#*=}"
     ;;
     -h=*|--help=*)
-    usage();
+    usage()
     ;;
     *)
             # unknown option
