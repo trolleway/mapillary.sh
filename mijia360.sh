@@ -28,7 +28,7 @@ while getopts ":u:p:a:s" o; do
 done
 shift $((OPTIND-1))
 
-if [ -z "${u}" ] || [ -z "${p}" ] || [ -z "${a}" ] || [ -z "${s}" ] ; then
+if [ -z "${USERNAME}" ] || [ -z "${PASSWORD}" ] || [ -z "${ANGLE}" ] || [ -z "${SOURCE}" ] ; then
     usage
 fi
 
