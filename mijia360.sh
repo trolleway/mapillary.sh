@@ -6,14 +6,11 @@
 
 usage() { printf "Upload Xiaomi Mijia 360 georefrenced photos to Mapillary \n Usage: $0 [-u <mapillary username>] [-p <password>] [-a <offset angle>] [-s <source folder>]" 1>&2; exit 1; }
 
-while getopts ":u:p:a:s:" o; do
+while getopts ":u:a:s:" o; do
     case "${o}" in
         u)
             USERNAME=${OPTARG}
             #((s == 45 || s == 90)) || usage
-            ;;
-        p)
-            PASSWORD=${OPTARG}
             ;;
         a)
             ANGLE=${OPTARG}
@@ -33,7 +30,7 @@ echo PASSWORD = ${PASSWORD}
 echo ANGLE = ${ANGLE}
 echo PATH = ${PATH}
 
-if [ -z "${USERNAME}" ] || [ -z "${PASSWORD}" ] || [ -z "${ANGLE}" ] || [ -z "${PATH}" ] ; then
+if [ -z "${USERNAME}" ]  || [ -z "${ANGLE}" ] || [ -z "${PATH}" ] ; then
     usage
 fi
 
@@ -42,13 +39,7 @@ USERNAME="trolleway"
 ANGLE="180"
 
 mapillary_tools process --advanced --import_path "$PATH" --user_name $USERNAME --cutoff_distance 100 --cutoff_time 60 --interpolate_directions --offset_angle $ANGLE --rerun --overwrite_EXIF_direction_tag 2> /dev/null
-expect {
 
-    "*assword:"
-        {
-            send "$PASSWORD\n"
-        }
-    }
 
 i=1
 sp="/-\|"
