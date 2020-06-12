@@ -1,31 +1,35 @@
 #!/bin/bash
-usage() {                                      # Function: Print a help message.
-  echo "Upload Xiaomi Mijia 360 georefrenced photos to Mapillary" 1>&2 
-  echo "Usage: $0 [ --u mapillary username ] [ -s --source folder with georefrenced images ]" 1>&2 
-}
+#usage() {                                      # Function: Print a help message.
+#  echo "Upload Xiaomi Mijia 360 georefrenced photos to Mapillary" 1>&2 
+#  echo "Usage: $0 [ --u mapillary username ] [ -s --source folder with georefrenced images ]" 1>&2 
+#}
 
-(( $# )) || usage()
-for i in "$@"
-do
-case $i in
-    -u=*|--username=*)
-    USERNAME="${i#*=}"
+usage() { echo "Usage: $0 [-s <45|90>] [-p <string>]" 1>&2; exit 1; }
 
-    ;;
-    -a=*|--angle=*)
-    ANGLE="${i#*=}"
-    ;;
-    -s=*|--source=*)
-    SOURCE="${i#*=}"
-    ;;
-    -h=*|--help=*)
-    usage()
-    ;;
-    *)
-            # unknown option
-    ;;
-esac
+while getopts ":s:p:" o; do
+    case "${o}" in
+        s)
+            s=${OPTARG}
+            ((s == 45 || s == 90)) || usage
+            ;;
+        p)
+            p=${OPTARG}
+            ;;
+        *)
+            usage
+            ;;
+    esac
 done
-echo USERNAME = ${USERNAME}
-echo ANGLE = ${ANGLE}
-echo SOURCE = ${SOURCE}
+shift $((OPTIND-1))
+
+if [ -z "${s}" ] || [ -z "${p}" ]; then
+    usage
+fi
+
+echo "s = ${s}"
+echo "p = ${p}"
+#-------------------
+
+#echo USERNAME = ${USERNAME}
+#echo ANGLE = ${ANGLE}
+#echo SOURCE = ${SOURCE}
