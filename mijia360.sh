@@ -1,8 +1,8 @@
 #!/bin/bash
-#usage() {                                      # Function: Print a help message.
-#  echo "Upload Xiaomi Mijia 360 georefrenced photos to Mapillary" 1>&2 
-#  echo "Usage: $0 [ --u mapillary username ] [ -s --source folder with georefrenced images ]" 1>&2 
-#}
+
+
+# RUN apt-cache policy tzdata
+# RUN apt-get install except
 
 usage() { printf "Upload Xiaomi Mijia 360 georefrenced photos to Mapillary \n Usage: $0 [-u <mapillary username>] [-p <password>] [-a <offset angle>] [-s <source folder>]" 1>&2; exit 1; }
 
@@ -43,11 +43,7 @@ ANGLE="180"
 
 mapillary_tools process --advanced --import_path "$PATH" --user_name $USERNAME --cutoff_distance 100 --cutoff_time 60 --interpolate_directions --offset_angle $ANGLE --rerun --overwrite_EXIF_direction_tag 2> /dev/null
 expect {
-    "(*name:)?"
-        {
-            send "$USERNAME\n"
-            expect "*assword:" { send "$PASSWORD\n"}
-        }
+
     "*assword:"
         {
             send "$PASSWORD\n"
