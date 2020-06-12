@@ -1,7 +1,10 @@
 #!/bin/bash
-usage="$(basename "$0") Upload Xiaomi Mijia 360 georefrenced photos to Mapillary --u mapillary username -a --angle offset angle -s --source folder with georefrenced images
+usage() {                                      # Function: Print a help message.
+  echo "Upload Xiaomi Mijia 360 georefrenced photos to Mapillary" 1>&2 
+  echo "Usage: $0 [ --u mapillary username ] [ -s --source folder with georefrenced images ]" 1>&2 
+}
 
-#(( $# )) || echo "$usage" >&2
+(( $# )) || usage()
 for i in "$@"
 do
 case $i in
