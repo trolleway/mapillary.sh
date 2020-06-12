@@ -6,7 +6,7 @@
 
 usage() { printf "Upload Xiaomi Mijia 360 georefrenced photos to Mapillary \n Usage: $0 [-u <mapillary username>] [-p <password>] [-a <offset angle>] [-s <source folder>]" 1>&2; exit 1; }
 
-while getopts ":u:a:d" o; do
+while getopts ":u:p:a:s" o; do
     case "${o}" in
         u)
             USERNAME=${OPTARG}
