@@ -19,7 +19,7 @@ while getopts ":u:p:a:s" o; do
             ANGLE=${OPTARG}
             ;;
         s)
-            SOURCE=${OPTARG}
+            PATH=${OPTARG}
             ;;    
         *)
             usage
@@ -31,9 +31,9 @@ shift $((OPTIND-1))
 echo USERNAME = ${USERNAME}
 echo PASSWORD = ${PASSWORD}
 echo ANGLE = ${ANGLE}
-echo SOURCE = ${SOURCE}
+echo PATH = ${PATH}
 
-if [ -z "${USERNAME}" ] || [ -z "${PASSWORD}" ] || [ -z "${ANGLE}" ] || [ -z "${SOURCE}" ] ; then
+if [ -z "${USERNAME}" ] || [ -z "${PASSWORD}" ] || [ -z "${ANGLE}" ] || [ -z "${PATH}" ] ; then
     usage
 fi
 
