@@ -16,7 +16,7 @@ case $i in
     SOURCE="${i#*=}"
     ;;
     -h=*|--help=*)
-    echo "$usage" >&2
+    echo "$usage" >&2;
     ;;
     *)
             # unknown option
