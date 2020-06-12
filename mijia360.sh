@@ -4,17 +4,23 @@
 #  echo "Usage: $0 [ --u mapillary username ] [ -s --source folder with georefrenced images ]" 1>&2 
 #}
 
-usage() { echo "Usage: $0 [-s <45|90>] [-p <string>]" 1>&2; exit 1; }
+usage() { echo "Upload Xiaomi Mijia 360 georefrenced photos to Mapillary \n Usage: $0 [-u <mapillary username>] [-p <password>] [-a <offset angle>] [-s <source folder>]" 1>&2; exit 1; }
 
-while getopts ":s:p:" o; do
+while getopts ":u:a:d" o; do
     case "${o}" in
-        s)
-            s=${OPTARG}
-            ((s == 45 || s == 90)) || usage
+        u)
+            USERNAME=${OPTARG}
+            #((s == 45 || s == 90)) || usage
             ;;
         p)
-            p=${OPTARG}
+            PASSWORD=${OPTARG}
             ;;
+        a)
+            ANGLE=${OPTARG}
+            ;;
+        s)
+            SOURCE=${OPTARG}
+            ;;    
         *)
             usage
             ;;
@@ -26,10 +32,10 @@ if [ -z "${s}" ] || [ -z "${p}" ]; then
     usage
 fi
 
-echo "s = ${s}"
-echo "p = ${p}"
+#echo "s = ${s}"
+#echo "p = ${p}"
 #-------------------
 
-#echo USERNAME = ${USERNAME}
-#echo ANGLE = ${ANGLE}
-#echo SOURCE = ${SOURCE}
+echo USERNAME = ${USERNAME}
+echo ANGLE = ${ANGLE}
+echo SOURCE = ${SOURCE}
