@@ -81,9 +81,11 @@ for filepath in files:
     print('timezone calculation '+str(unix_timestamp_timezone))
 
     # sample video
-    cmd = '''{mapillary_tools} sample_video --video_import_path "'''+os.path.normpath(filepath)+'''" --video_sample_interval 0.25 --video_start_time {unix_timestamp_timezone} --advanced'''
-    cmd = cmd.format(mapillary_tools=mapillary_tools,unix_timestamp_timezone=unix_timestamp_timezone)
+    
+    cmd = '''{mapillary_tools} sample_video --video_import_path "'''+os.path.normpath(filepath)+'''" --video_sample_interval {video_sample_interval} --video_start_time {unix_timestamp_timezone} --advanced'''
+    cmd = cmd.format(mapillary_tools=mapillary_tools,unix_timestamp_timezone=unix_timestamp_timezone,video_sample_interval=1)
     print(cmd)
+    #0.25
     if testmode==False:
         os.system(cmd)
 
