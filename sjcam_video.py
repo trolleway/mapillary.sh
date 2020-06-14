@@ -26,6 +26,9 @@ args = get_args()
 testmode = args.testmode
 skip_upload=args.skip_upload
 
+print(testmode)
+print(skip_upload)
+
 mapillary_tools = 'c:\gis\pano_heading\mapillary_tools.exe'
 mapillary_tools = 'mapillary_tools'
 CROPPED_FOLDER = 'cropped'
