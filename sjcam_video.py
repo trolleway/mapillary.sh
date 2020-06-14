@@ -12,6 +12,8 @@ def get_args():
     import argparse
     p = argparse.ArgumentParser(description='Process folder with videofiles from Advocam dashcam and gpx file, upload frames to Mapillary. Datetime of videofiles determined from filenames')
     p.add_argument('--testmode', help='Test commands, not perform actions')
+    p.add_argument('--date', help='date in YYYY-MM-DD',required=True)
+    p.add_argument('--path', help='path to mp4 folder',required=True)
     #p.add_argument('gpx_file', help='Location of GPX file to get locations from.')
     #p.add_argument('time_offset',
     #    help='Time offset between GPX and photos. If your camera is ahead by one minute, time_offset is 60.',
@@ -23,9 +25,11 @@ args = get_args()
 testmode = args.testmode
 
 mapillary_tools = 'c:\gis\pano_heading\mapillary_tools.exe'
+mapillary_tools = 'mapillary_tools'
 CROPPED_FOLDER = 'cropped'
 
 pathsrc = 'c:/mav/cardv/'
+pathsrc = args.path
 files = []
 for dirpath, dnames, fnames in os.walk(pathsrc):
     for f in fnames:
@@ -52,8 +56,8 @@ for filepath in files:
                
     filepath = cropped_filepath
     filename = os.path.basename(filepath)
-    filedate_from_name = filename[6:14]
-    filetime_from_name = filename[15:21]  
+    filedate_from_name = args.date
+    filetime_from_name = filename[0:6]  
 
     #get video begin datetime from video filename
     timestamp = time.mktime(datetime.datetime.strptime(filedate_from_name+'_'+filetime_from_name, "%Y%m%d_%H%M%S").timetuple())
