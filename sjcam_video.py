@@ -99,7 +99,7 @@ for filepath in files:
     cmd = ''' {mapillary_tools} upload --import_path "'''+os.path.normpath(os.path.join(sampled_video_frames_path, os.path.splitext(filename)[0]))+'''" --skip_subfolders --number_threads 5 --max_attempts 10 --advanced'''
     cmd = cmd.format(mapillary_tools=mapillary_tools)
     print(cmd)
-    if (testmode==FAlse) and (skip_upload==False):
+    if (testmode==False) and (skip_upload==False):
         os.system(cmd)   
         
         
