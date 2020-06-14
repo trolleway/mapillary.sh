@@ -14,7 +14,7 @@ def get_args():
     p.add_argument('--testmode', help='Test commands, not perform actions')
     p.add_argument('--date', help='date in YYYY-MM-DD',required=True)
     p.add_argument('--path', help='path to mp4 folder',required=True)
-    #p.add_argument('gpx_file', help='Location of GPX file to get locations from.')
+    p.add_argument('--gpx', help='Location of GPX file to get locations from.')
     #p.add_argument('time_offset',
     #    help='Time offset between GPX and photos. If your camera is ahead by one minute, time_offset is 60.',
     #    default=0, type=float, nargs='?') # nargs='?' is how you make the last positional argument optional.
@@ -75,8 +75,9 @@ for filepath in files:
 
     sampled_video_frames_path = os.path.join(os.path.dirname(filepath),'mapillary_sampled_video_frames')
     
-    # geotag frames using hardcoded gpx
-    cmd = ''' {mapillary_tools} process --advanced --import_path "'''+os.path.normpath(os.path.join(sampled_video_frames_path, os.path.splitext(filename)[0]))+'''" --user_name "trolleway" --geotag_source "gpx" --geotag_source_path "c:\\mav\\cardv\\20190608-101937.gpx" --overwrite_all_EXIF_tags '''
+    # geotag frames using gpx file
+    gpx=args.gpx
+    cmd = ''' {mapillary_tools} process --advanced --import_path "'''+os.path.normpath(os.path.join(sampled_video_frames_path, os.path.splitext(filename)[0]))+'''" --user_name "trolleway" --geotag_source "gpx" --geotag_source_path "'''+gpx+'''" --overwrite_all_EXIF_tags '''
     cmd = cmd.format(mapillary_tools=mapillary_tools)
     print(cmd)
     if testmode is None:
