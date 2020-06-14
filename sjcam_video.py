@@ -66,7 +66,7 @@ for filepath in files:
 
     unix_timestamp_ms = int(timestamp)*1000
     unix_timestamp_timezone = unix_timestamp_ms+(0*60*60*1000)
-    print unix_timestamp_timezone
+    print('timezone calculation'+unix_timestamp_timezone)
 
     # sample video
     cmd = '''{mapillary_tools} sample_video --video_import_path "'''+os.path.normpath(filepath)+'''" --video_sample_interval 0.25 --video_start_time {unix_timestamp_timezone} --advanced'''
