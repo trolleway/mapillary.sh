@@ -45,9 +45,11 @@ for filepath in files:
         
     cropped_filepath = os.path.join(os.path.dirname(filepath),CROPPED_FOLDER,os.path.basename(filepath))
         
-    #convert video: crop license plate, redude fps to 8 for faster processing in mapillary_tools
-    cmd = '''ffmpeg -i "'''+os.path.normpath(filepath)+'''"  -loglevel panic -r 8 -vf crop=iw:ih-140:0:0 -c:a copy "'''+os.path.normpath(cropped_filepath)+'''"'''
+    #convert video: redude fps to 8 for faster processing in mapillary_tools
+    cmd = '''ffmpeg -i "'''+os.path.normpath(filepath)+'''"  -loglevel panic -r 8  -c:a copy "'''+os.path.normpath(cropped_filepath)+'''"'''
     print(cmd)
+    # crop image -vf crop=iw:ih-140:0:0
+    
     if testmode is None:
         pass
     os.system(cmd)    
