@@ -35,6 +35,9 @@ CROPPED_FOLDER = 'cropped'
 
 pathsrc = 'c:/mav/cardv/'
 pathsrc = args.path
+
+
+
 files = []
 for dirpath, dnames, fnames in os.walk(pathsrc):
     for f in fnames:
@@ -45,6 +48,7 @@ for filepath in files:
 
  #create dir if not exists
     cropped_folder_path = os.path.join(os.path.dirname(filepath),CROPPED_FOLDER)
+    shutil.rmtree(cropped_folder_path,ignore_errors=True)
     if not os.path.exists(cropped_folder_path):
         os.makedirs(cropped_folder_path)
         
@@ -77,7 +81,7 @@ for filepath in files:
     cmd = '''{mapillary_tools} sample_video --video_import_path "'''+os.path.normpath(filepath)+'''" --video_sample_interval 0.25 --video_start_time {unix_timestamp_timezone} --advanced'''
     cmd = cmd.format(mapillary_tools=mapillary_tools,unix_timestamp_timezone=unix_timestamp_timezone)
     print(cmd)
-    if testmode is None:
+    if testmode==False:
         os.system(cmd)
 
     sampled_video_frames_path = os.path.join(os.path.dirname(filepath),'mapillary_sampled_video_frames')
@@ -87,14 +91,14 @@ for filepath in files:
     cmd = ''' {mapillary_tools} process --advanced --import_path "'''+os.path.normpath(os.path.join(sampled_video_frames_path, os.path.splitext(filename)[0]))+'''" --user_name "trolleway" --geotag_source "gpx" --geotag_source_path "'''+gpx+'''" --overwrite_all_EXIF_tags '''
     cmd = cmd.format(mapillary_tools=mapillary_tools)
     print(cmd)
-    if testmode is None:
+    if testmode==False:
         os.system(cmd)
     
     # upload to mapillary
     cmd = ''' {mapillary_tools} upload --import_path "'''+os.path.normpath(os.path.join(sampled_video_frames_path, os.path.splitext(filename)[0]))+'''" --skip_subfolders --number_threads 5 --max_attempts 10 --advanced'''
     cmd = cmd.format(mapillary_tools=mapillary_tools)
     print(cmd)
-    if (testmode is None) and (skip_upload is None):
+    if (testmode==FAlse) and (skip_upload==False):
         os.system(cmd)   
         
         
