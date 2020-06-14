@@ -14,7 +14,7 @@ def get_args():
     p = argparse.ArgumentParser(description='Process folder with videofiles from Advocam dashcam and gpx file, upload frames to Mapillary. Datetime of videofiles determined from filenames')
     p.add_argument('--testmode', dest='testmode', action='store_true', help='Test commands, not perform actions')
     p.add_argument('--skip_upload', dest='skip_upload', action='store_true', help='perform all actions except upload')
-    p.add_argument('--date', help='date in YYYY-MM-DD',required=True)
+    p.add_argument('--date', help='date in YYYYMMDD',required=True)
     p.add_argument('--path', help='path to mp4 folder',required=True)
     p.add_argument('--gpx', help='Location of GPX file to get locations from.')
     p.add_argument('--offset_time', help='offset time',required=True)
