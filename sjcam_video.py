@@ -12,6 +12,7 @@ def get_args():
     import argparse
     p = argparse.ArgumentParser(description='Process folder with videofiles from Advocam dashcam and gpx file, upload frames to Mapillary. Datetime of videofiles determined from filenames')
     p.add_argument('--testmode', dest='testmode', action='store_true', help='Test commands, not perform actions')
+    p.add_argument('--skip_upload', dest='skip_upload', action='store_true', help='perform all actions except upload')
     p.add_argument('--date', help='date in YYYY-MM-DD',required=True)
     p.add_argument('--path', help='path to mp4 folder',required=True)
     p.add_argument('--gpx', help='Location of GPX file to get locations from.')
@@ -23,6 +24,7 @@ def get_args():
     
 args = get_args()
 testmode = args.testmode
+skip_upload=args.skip_upload
 
 mapillary_tools = 'c:\gis\pano_heading\mapillary_tools.exe'
 mapillary_tools = 'mapillary_tools'
@@ -89,7 +91,7 @@ for filepath in files:
     cmd = ''' {mapillary_tools} upload --import_path "'''+os.path.normpath(os.path.join(sampled_video_frames_path, os.path.splitext(filename)[0]))+'''" --skip_subfolders --number_threads 5 --max_attempts 10 --advanced'''
     cmd = cmd.format(mapillary_tools=mapillary_tools)
     print(cmd)
-    if testmode is None:
+    if (testmode is None) and (skip_upload is None):
         os.system(cmd)   
         
         
