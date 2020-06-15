@@ -58,17 +58,15 @@ for filepath in files:
     cropped_filepath = os.path.join(os.path.dirname(filepath),CROPPED_FOLDER,os.path.basename(filepath))
         
     #convert video: redude fps to 8 for faster processing in mapillary_tools
-    cmd = '''ffmpeg -y -i "'''+os.path.normpath(filepath)+'''"  -loglevel panic -r 8  -c:a copy "'''+os.path.normpath(cropped_filepath)+'''"'''
-    print(cmd)
+    #cmd = '''ffmpeg -y -i "'''+os.path.normpath(filepath)+'''"  -loglevel panic -r 8  -c:a copy "'''+os.path.normpath(cropped_filepath)+'''"'''
+    #print(cmd)
     # crop image -vf crop=iw:ih-140:0:0
-    
-    if testmode is None:
-        pass
-    os.system(cmd)    
-    
-    path = os.path.join(pathsrc,CROPPED_FOLDER)
+    #if testmode is None:
+    #    pass
+    #os.system(cmd)   
+    #path = os.path.join(pathsrc,CROPPED_FOLDER)
                
-    filepath = cropped_filepath
+    #filepath = cropped_filepath
     filename = os.path.basename(filepath)
     filedate_from_name = args.date
     filetime_from_name = filename[0:6]  
