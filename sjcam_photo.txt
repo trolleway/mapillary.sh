@@ -1,5 +1,5 @@
 
-ls -d {$PWD}/*.JPG | parallel --bar bash ./filename2date.sh {} 2020-05-24
+ls -d *.JPG | parallel --bar bash ./filename2date.sh {} 2020-05-24
 time exiftool -overwrite_original "-FileModifyDate>CreateDate" *.JPG && exiftool -overwrite_original "-CreateDate>DateTimeOriginal" *.JPG
 --forward
 
