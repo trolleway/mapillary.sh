@@ -46,7 +46,7 @@ for dirpath, dnames, fnames in os.walk(pathsrc):
     for f in fnames:
         if f.upper().endswith(".MP4"):
              files.append(os.path.join(dirpath, f))
-
+print("found files: "+str(len(files)))
 for filepath in files:
 
  #create dir if not exists
@@ -79,6 +79,21 @@ for filepath in files:
     print('timezone calculation '+str(unix_timestamp_timezone))
 
     # sample video
+    
+    cmd = '''for i in {0..180} ; do ffmpeg -accurate_seek -ss `echo $i*1.0 | bc` -i "'''+os.path.normpath(filepath)+'''"   -frames:v 1 frame_$i.jpg ; done'''
+    print(cmd)
+    if testmode==False:
+        os.system(cmd)
+    quit()
+    
+    cmd = '''{mapillary_tools} sample_video --video_import_path "'''+os.path.normpath(filepath)+'''" --advanced'''
+    cmd = cmd.format(mapillary_tools=mapillary_tools,unix_timestamp_timezone=unix_timestamp_timezone,video_sample_interval=1)
+    print(cmd)
+    #0.25
+    if testmode==False:
+        os.system(cmd)
+        
+    cmd = '''{mapillary_tools} process --advanced --import_path "path/to/.mapillary/sampled_video_frames/video_import_path" --user_name "username_at_mapillary" --geotag_source "gpx" --geotag_source_path "path/to/gpx_file" --overwrite_all_EXIF_tags'''
     
     cmd = '''{mapillary_tools} sample_video --video_import_path "'''+os.path.normpath(filepath)+'''" --video_sample_interval {video_sample_interval} --video_start_time {unix_timestamp_timezone} --advanced'''
     cmd = cmd.format(mapillary_tools=mapillary_tools,unix_timestamp_timezone=unix_timestamp_timezone,video_sample_interval=1)

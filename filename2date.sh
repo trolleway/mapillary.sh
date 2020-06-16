@@ -1,6 +1,10 @@
 #!/bin/sh
 
 filename=$(basename -s .JPG "$1")
+
+# $1  path to JPG file. It name should begin with HHMMSS sequence
+# $2 date in YYYY-MM-DD
+
 #photo_date=$2
 
 hour=${filename:0:2}
