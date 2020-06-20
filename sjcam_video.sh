@@ -19,4 +19,4 @@ do
 
 done
 video_dir=$(dirname "$video") 
-ls   $video_dir | grep ".JPG" | parallel --bar  bash ./filename2date.sh $video_dir/{} $capture_date
+find $video_dir -name "*.JPG"  | parallel --bar  bash ./filename2date.sh $video_dir/{} $capture_date
