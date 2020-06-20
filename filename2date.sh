@@ -12,4 +12,6 @@ min=${filename:2:2}
 sec=${filename:4:2}
 
 text="$2 $hour:$min:$sec"
-exiftool -quiet -overwrite_original -timeZoneOffset=-3 -DateTime=" $text" -CreateDate=" $text" -FileModifyDate=" $text" -DateTimeOriginal=" $text" $1
+exiftool -q -q -overwrite_original -timeZoneOffset=-3 -DateTime="$text" -CreateDate="$text" -FileModifyDate="$text" -DateTimeOriginal="$text" $1
+
+
