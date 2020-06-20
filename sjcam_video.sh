@@ -19,4 +19,4 @@ do
 
 done
 video_dir=$(dirname "$video") 
-find $video_dir -name "*.JPG"  | parallel --bar  bash ./filename2date.sh $video_dir/{} $capture_date
+find $video_dir -name "*.JPG"  | xargs basename --multiple | parallel --bar  bash ./filename2date.sh $video_dir/{} $capture_date
