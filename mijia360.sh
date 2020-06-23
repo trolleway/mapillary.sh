@@ -1,53 +1,32 @@
 #!/bin/bash
 
+# $1 - path to folder
+# $2 - angle 
 
 # RUN apt-cache policy tzdata
 # RUN apt-get install except
 
 usage() { printf "Upload Xiaomi Mijia 360 georefrenced photos to Mapillary \n Usage: $0 [-u <mapillary username>] [-p <password>] [-a <offset angle>] [-s <source folder>]" 1>&2; exit 1; }
 
-while getopts ":u:a:s:" o; do
-    case "${o}" in
-        u)
-            USERNAME=${OPTARG}
-            #((s == 45 || s == 90)) || usage
-            ;;
-        a)
-            ANGLE=${OPTARG}
-            ;;
-        s)
-            PATH=${OPTARG}
-            ;;    
-        *)
-            usage
-            ;;
-    esac
-done
-shift $((OPTIND-1))
-
-echo USERNAME = ${USERNAME}
-echo PASSWORD = ${PASSWORD}
-echo ANGLE = ${ANGLE}
-echo PATH = ${PATH}
-
-if [ -z "${USERNAME}" ]  || [ -z "${ANGLE}" ] || [ -z "${PATH}" ] ; then
-    usage
-fi
 
 
 USERNAME="trolleway"
 ANGLE="180"
 
-spawn mapillary_tools process --advanced --import_path "$PATH" --user_name $USERNAME --cutoff_distance 100 --cutoff_time 60 --interpolate_directions --offset_angle $ANGLE --rerun --overwrite_EXIF_direction_tag 2> /dev/null
+#search first gpx file in folder
+gpx=$(find $1 -name "*.gpx" |  head -n 1)
+#offset_time=$((3*3600))
+#echo $offset_time
 
+#i can't fighred how to deal with timezones in mapillary_tools geotag_source, but exiftool seems work
+echo 'geotag'
+#find $1 -name "*.JPG" | parallel --bar exiftool -q -q -overwrite_original -geotag $gpx  {}
 
-i=1
-sp="/-\|"
-echo -n ' '
-for file in "$PWD"
-do
-  exiftool -overwrite_original -quiet -ProjectionType="equirectangular" -UsePanoramaViewer="True" -"PoseHeadingDegrees<$exif:GPSImgDirection" -"CroppedAreaImageWidthPixels<$ImageWidth" -"CroppedAreaImageHeightPixels<$ImageHeight" -"FullPanoWidthPixels<$ImageWidth" -"FullPanoHeightPixels<$ImageHeight" -CroppedAreaLeftPixels="0" -CroppedAreaTopPixels="0" "$file" mapillary_tools process --advanced --import_path "$PWD" --user_name $USERNAME --cutoff_distance 100 --cutoff_time 60 --interpolate_directions --offset_angle $ANGLE --rerun --overwrite_EXIF_direction_tag  2> /dev/null
-  printf "\b${sp:i++%${#sp}:1}"
-done
-spawn mapillary_tools upload --import_path "$PWD" --skip_subfolders --number_threads 5 --max_attempts 10 --advanced
+exiftool -progress -q -q -overwrite_original -geotag $gpx $1
 
+mapillary_tools process --advanced --import_path "$1" --user_name $USERNAME --cutoff_distance 100 --cutoff_time 60 \
+--interpolate_directions --offset_angle $2 --rerun --overwrite_EXIF_direction_tag 2> /dev/null  
+
+mapillary_tools upload --import_path "$1" --skip_subfolders --number_threads 4 --max_attempts 50 --advanced
+echo "End" 
+  
