@@ -1,6 +1,6 @@
 
 
-src=/media/trolleway/2020/xiaomi360/uploaded/2g
+src=$1
 out=$src/logo
 mkdir $out
 
