@@ -97,10 +97,10 @@ esac
 
 USERNAME=$(cat $tempfile)
 
-dialog --msgbox "bash mijia360.sh ${FILE} ${ANGLE} ${USERNAME} " 10 60
+#dialog --msgbox "bash mijia360.sh ${FILE} ${ANGLE} ${USERNAME} " 10 60
 
 
-echo bash mijia360.sh $FILE $ANGLE $USERNAME
+bash mijia360.sh $FILE $ANGLE $USERNAME
 read -n 1 -s -r -p "Press any key to continue"
 }
 
