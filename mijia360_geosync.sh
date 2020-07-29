@@ -15,4 +15,4 @@ fi
 #total=${ls -1q $1/*.JPG  | wc -l}
 #i=0
 
-exiftool -overwrite_original -q -q -P -progress:Geotagging -geotag=$gpx '-Geotime<${DateTimeOriginal}+03:00' $1
+exiftool -overwrite_original -q -P -progress:Geotagging -geotag=$gpx '-Geotime<${DateTimeOriginal}+03:00' $1
