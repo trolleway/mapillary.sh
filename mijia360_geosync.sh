@@ -12,7 +12,7 @@ fi
 
 #search .JPG case in-sensitive
 
-total=${ls $1/*.[jJ][pP][gG]*  | wc -l}
+total=${ls -1q $1/*.[jJ][pP][gG]*  | wc -l}
 i=0
 
 for f in $(ls $1/*.[jJ][pP][gG]*}; do 
