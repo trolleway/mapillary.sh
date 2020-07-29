@@ -11,6 +11,12 @@ then
 fi
 
 #search .JPG case in-sensitive
-#run in parallel with progressbar
 
-ls $1/*.[jJ][pP][gG]* | parallel --bar --jobs 2 exiftool -overwrite_original -P -geotag=$gpx "-Geotime<${DateTimeOriginal}+03:00" {}
+total=${ls -1q log* | wc -l}
+i=0
+
+for f in $(ls $1/*.[jJ][pP][gG]*}; do 
+    exiftool -q -q -q -overwrite_original -P -geotag=$gpx '-Geotime<${DateTimeOriginal}+03:00' $f 
+   i=$((i+1))
+   echo $i/$total 
+done;
