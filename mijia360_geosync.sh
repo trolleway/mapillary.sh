@@ -15,8 +15,4 @@ fi
 #total=${ls -1q $1/*.JPG  | wc -l}
 #i=0
 
-for f in ${ls $1/*.[jJ][pP][gG]*}; do 
-    exiftool -q -q -q -overwrite_original -P -geotag=$gpx '-Geotime<${DateTimeOriginal}+03:00' $f 
-#   i=$((i+1))
-#   echo $i/$total 
-done;
+exiftool -overwrite_original -q -q -q -P -geotag=$gpx '-Geotime<${DateTimeOriginal}+03:00' $1
