@@ -18,7 +18,7 @@ else echo "${FILE} is not valid";
      
 fi
 
-dialog --msgbox "path is ${FILE} ." 10 30
+
 
 bash mijia360_geosync.sh ${FILE}
 read -n 1 -s -r -p "Press any key to continue"
@@ -97,9 +97,6 @@ esac
 
 USERNAME=$(cat $tempfile)
 
-#dialog --msgbox "bash mijia360.sh ${FILE} ${ANGLE} ${USERNAME} " 10 60
-
-
 bash mijia360.sh $FILE $ANGLE $USERNAME
 read -n 1 -s -r -p "Press any key to continue"
 }
@@ -120,7 +117,6 @@ else echo "${FILE} is not valid";
      
 fi
 
-dialog --msgbox "path is ${FILE} ." 10 30
 
 bash logo360/overlay_logo.sh ${FILE}
 read -n 1 -s -r -p "Press any key to continue"
