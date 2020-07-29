@@ -13,4 +13,4 @@ fi
 #search .JPG case in-sensitive
 #run in parallel with progressbar
 
-ls $1/*.[jJ][pP][gG]* | parallel --bar --jobs 2 exiftool -overwrite_original -P -geotag=$gpx '-Geotime<${DateTimeOriginal}+03:00' {}
+ls $1/*.[jJ][pP][gG]* | parallel --bar --jobs 2 exiftool -overwrite_original -P -geotag=$gpx "-Geotime<${DateTimeOriginal}+03:00" {}
