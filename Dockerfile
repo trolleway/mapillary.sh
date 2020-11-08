@@ -27,4 +27,15 @@ RUN apt-get install --no-install-recommends -y jq curl
 #video
 RUN apt-get install --no-install-recommends -y ffmpeg
 
+ADD https://api.github.com/repos/trolleway/mapillary.sh/git/refs/heads/master   ver.json
+#The API call will return different results when the head changes, invalidating the docker cache
+
+RUN git clone --recurse-submodules https://github.com/trolleway/mapillary.sh.git
+
+RUN chmod  --recursive 777 /mapillary.sh
+
+
+WORKDIR /mapillary.sh
+
+
 CMD ["/bin/bash"]
