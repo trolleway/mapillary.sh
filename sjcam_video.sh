@@ -1,7 +1,9 @@
 #!/bin/bash
 
-# $1 - path to MP4 folder 
-# $2 date in YYYY-MM-DD
+# $1 - path to folder
+# $2 - angle 
+# $3 - mapillary username
+
 path=$(realpath $1)
 capture_date=$2
 echo $capture_date

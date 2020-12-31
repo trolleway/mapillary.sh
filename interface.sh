@@ -123,6 +123,83 @@ read -n 1 -s -r -p "Press any key to continue"
 }
 
 
+gopro_video() {
+dialog --title "Choose any file in folder" --fselect ~ 30 60
+FILE=$(dialog --stdout --title "Choose any file in folder with GoPro videos " --fselect $HOME/ 14 48)
+echo "${FILE} file chosen."
+
+
+if   [ -d "${FILE}" ]
+then echo 'dir';
+elif [ -f "${FILE}" ]
+then FILE=$(dirname $FILE);
+else echo "${FILE} is not valid";
+     
+fi
+
+# ----- angle
+
+DIALOG=${DIALOG=dialog}
+tempfile=`tempfile 2>/dev/null` || tempfile=/tmp/test$$
+trap "rm -f $tempfile" 0 1 2 5 15
+
+$DIALOG --title "My input box" --clear \
+        --inputbox "Enter offset_angle\n
+0..360:" 16 51 2> $tempfile
+
+retval=$?
+
+case $retval in
+  0)
+    echo "Input string is `cat $tempfile`";;
+  1)
+    echo "Cancel pressed.";;
+  255)
+    if test -s $tempfile ; then
+      cat $tempfile
+    else
+      echo "ESC pressed."
+	  return
+    fi
+    ;;
+esac
+
+ANGLE=$(cat $tempfile)
+
+# ----- username
+
+DIALOG=${DIALOG=dialog}
+tempfile=`tempfile 2>/dev/null` || tempfile=/tmp/test$$
+trap "rm -f $tempfile" 0 1 2 5 15
+
+$DIALOG --title "My input box" --clear \
+        --inputbox "Enter mapillary username\n
+You sholuld do mapillary_auth before:" 16 51 2> $tempfile
+
+retval=$?
+
+case $retval in
+  0)
+    echo "Input string is `cat $tempfile`";;
+  1)
+    echo "Cancel pressed.";;
+  255)
+    if test -s $tempfile ; then
+      cat $tempfile
+    else
+      echo "ESC pressed."
+	  return
+    fi
+    ;;
+esac
+
+USERNAME=$(cat $tempfile)
+
+bash gopro_video.sh $FILE $ANGLE $USERNAME
+read -n 1 -s -r -p "Press any key to continue"
+}
+
+
 
 while true
 do
@@ -136,6 +213,7 @@ $DIALOG --clear --title "Select operation" \
         "xiaomi360_geotag" "Geotag folder Xiaomi360 images with gpx track" \
         "xiaomi360_mapillary" "Upload Xiaomi360 images to Mapillary, set angle and username" \
         "xiaomi360_logo" "Overlay logo on Xiaomi360 images" \
+        "gopro_video" "GoPro video process_and_upload" \
         "exit"  "Exit" 2> $tempfile
 
 retval=$?
@@ -152,6 +230,7 @@ case $retval in
         xiaomi360_geotag) xiaomi360_geotag;;
         xiaomi360_mapillary) xiaomi360_mapillary;;
         xiaomi360_logo) xiaomi360_logo;;
+        gopro_video) gopro_video;;
         exit) exit;;
     esac;;
   1)
