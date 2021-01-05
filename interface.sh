@@ -24,7 +24,7 @@ bash mijia360_geosync.sh ${FILE}
 read -n 1 -s -r -p "Press any key to continue"
 }
 
-xiaomi360_mapillary() {
+process_and_upload() {
 dialog --title "Choose any file in folder" --fselect ~ 30 60
 FILE=$(dialog --stdout --title "Choose folder with JPG" --fselect $HOME/ 14 48)
 echo "${FILE} file chosen."
@@ -211,7 +211,7 @@ $DIALOG --clear --title "Select operation" \
         --menu "Select operation:" 20 81 8 \
         "mapillary_auth"  "Mapillary_tools auth" \
         "xiaomi360_geotag" "Geotag folder Xiaomi360 images with gpx track" \
-        "xiaomi360_mapillary" "Upload Xiaomi360 images to Mapillary, set angle and username" \
+        "process_and_upload" "process_and_upload images to Mapillary, set angle and username" \
         "xiaomi360_logo" "Overlay logo on Xiaomi360 images" \
         "gopro_video" "GoPro video process_and_upload" \
         "exit"  "Exit" 2> $tempfile
@@ -228,7 +228,7 @@ case $retval in
     case $choice in
         mapillary_auth) mapillary_auth;;
         xiaomi360_geotag) xiaomi360_geotag;;
-        xiaomi360_mapillary) xiaomi360_mapillary;;
+        process_and_upload) process_and_upload;;
         xiaomi360_logo) xiaomi360_logo;;
         gopro_video) gopro_video;;
         exit) exit;;
