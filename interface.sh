@@ -97,7 +97,7 @@ esac
 
 USERNAME=$(cat $tempfile)
 
-bash mijia360.sh $FILE $ANGLE $USERNAME
+bash process_and_upload.sh $FILE $ANGLE $USERNAME
 read -n 1 -s -r -p "Press any key to continue"
 }
 
