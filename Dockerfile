@@ -26,6 +26,7 @@ RUN apt-get install --no-install-recommends -y jq curl
 
 #video
 RUN apt-get install --no-install-recommends -y ffmpeg
+RUN apt-get install --no-install-recommends -y gpsbabel
 
 ADD https://api.github.com/repos/trolleway/mapillary.sh/git/refs/heads/master   ver.json
 #The API call will return different results when the head changes, invalidating the docker cache
