@@ -20,24 +20,42 @@ time mapillary_tools video_process  --video_import_path "$DIR" \
  --use_gps_start_time --interpolate_directions --offset_angle $ANGLE 
 
 # get ts of frist frame
-
-FRAME1=$(find $DIR/mapillary_sampled_video_frames -name '*.jpg' | sort | head -1)
-FRAMETIME=$(exiftool -s -s -s -d "%Y-%m-%d %H:%M:%S" -DateTimeOriginal $FRAME1)
-echo $FRAMETIME
+#---- calc time difference by start track
+FRAMEFRIST=$(find $DIR/mapillary_sampled_video_frames -name '*.jpg' | sort | head -1)
+FRAMETIME=$(exiftool -s -s -s -d "%Y-%m-%d %H:%M:%S" -DateTimeOriginal $FRAMEFRIST)
 FRAMETS=$(date -d "$FRAMETIME" +"%s")
-echo $FRAMETS
 
-GPXTS=$(gpxinfo $DIR/$FN.gpx | grep Started |  head -1 )
-GPXTS=${GPXTS:13:21}  
-GPXTS=$(date -d "$GPXTS" +"%s")  
-
+GPXSTART=$(gpxinfo $DIR/$FN.gpx | grep Started |  head -1 )
+GPXSTART=${GPXSTART:13:21}  
+GPXTS=$(date -d "$GPXSTART" +"%s")  
 echo $GPXTS
+
 deltaTS=$((FRAMETS - GPXTS))
 echo $deltaTS
 
 deltaHMS=$(date -d @$deltaTS +"%T")
+echo 'delta_begin='$deltaHMS
+#---- calc time difference by end track
+FRAMELAST=$(find $DIR/mapillary_sampled_video_frames -name '*.jpg' | sort | tail -1)
+FRAMETIME=$(exiftool -s -s -s -d "%Y-%m-%d %H:%M:%S" -DateTimeOriginal $FRAMELAST)
+FRAMETS=$(date -d "$FRAMETIME" +"%s")
+
+GPXFINISH=$(gpxinfo $DIR/$FN.gpx | grep Ended |  head -1 )
+GPXFINISH=${GPXFINISH:11:19}  
+echo $GPXFINISH
+GPXTS=$(date -d "$GPXFINISH" +"%s")  
+echo $GPXTS
+
+deltaTS=$((FRAMETS - GPXTS))
+echo $deltaTS
+
+deltaHMS=$(date -d @$deltaTS +"%T")
+echo 'delta_begin='$deltaHMS
 
 time exiftool  -overwrite_original "-AllDates-=$deltaHMS"  mapillary_sampled_video_frames/$FN/*.jpg
+#geosync with time drift
+
+time exiftool  -overwrite_original -geotag  $DIR/$FN-simplify.gpx -geosync="$GPXSTART@$FRAMEFRIST"  -geosync="$GPXFINISH@$FRAMELAST" mapillary_sampled_video_frames/$FN/*.jpg
 
 time exiftool "-AllDates+=$deltaHMS" -verbose mapillary_sampled_video_frames/$FN/GH018150_000002.jpg
 # try use simplified gpx
@@ -56,11 +74,6 @@ time exiftool "-AllDates+=$deltaHMS" -verbose mapillary_sampled_video_frames/$FN
 
 # get gpx start time 
 #pip install gpxpy
-STARTTIME=$(gpxinfo $DIR/$FN.gpx | grep Started |  head -1 )
-STARTTIME=${STARTTIME:13:21} 
-echo $STARTTIME
-TS=$(date -d "$STARTTIME" +"%s")
-echo $TS
 
 
 #georefrence to gopro track
