@@ -1,6 +1,6 @@
 DIR="/data/padalsk"
 
-FN="GH018150"
+FN="GH018108"
 
 
 USERNAME="trolleway"
@@ -28,6 +28,7 @@ FRAMETS=$(date -d "$FRAMETIME" +"%s")
 GPXSTART=$(gpxinfo $DIR/$FN.gpx | grep Started |  head -1 )
 GPXSTART=${GPXSTART:13:21}  
 GPXTS=$(date -d "$GPXSTART" +"%s")  
+GPXSTART_EXIFTOOL=$(date -d "$GPXSTART" +"%Y:%m:%d %H:%M:%S")  
 echo $GPXTS
 
 deltaTS=$((FRAMETS - GPXTS))
@@ -42,6 +43,7 @@ FRAMETS=$(date -d "$FRAMETIME" +"%s")
 
 GPXFINISH=$(gpxinfo $DIR/$FN.gpx | grep Ended |  head -1 )
 GPXFINISH=${GPXFINISH:11:19}  
+GPXFINISH_EXIFTOOL=$(date -d "$GPXFINISH" +"%Y:%m:%d %H:%M:%S")
 echo $GPXFINISH
 GPXTS=$(date -d "$GPXFINISH" +"%s")  
 echo $GPXTS
@@ -52,10 +54,11 @@ echo $deltaTS
 deltaHMS=$(date -d @$deltaTS +"%T")
 echo 'delta_begin='$deltaHMS
 
-time exiftool  -overwrite_original "-AllDates-=$deltaHMS"  mapillary_sampled_video_frames/$FN/*.jpg
+#time exiftool  -overwrite_original "-AllDates-=$deltaHMS"  mapillary_sampled_video_frames/$FN/*.jpg
 #geosync with time drift
-
-time exiftool  -overwrite_original -geotag  $DIR/$FN-simplify.gpx -geosync="$GPXSTART@$FRAMEFRIST"  -geosync="$GPXFINISH@$FRAMELAST" mapillary_sampled_video_frames/$FN/*.jpg
+#'-Geotime<${DateTimeOriginal}-03:00'
+time exiftool  -overwrite_original -geotag -verbose $DIR/$FN-simplify.gpx  -geosync="$GPXSTART_EXIFTOOL@$FRAMEFRIST"  -geosync="$GPXFINISH@$FRAMELAST" mapillary_sampled_video_frames/$FN/*.jpg
+time exiftool  -overwrite_original  -v -geotag $DIR/$FN-simplify.gpx  -geosync="2021:01:16 15:32:04.@$FRAMEFRIST"  -geosync="2021:01:16 15:41:31@$FRAMELAST" mapillary_sampled_video_frames/$FN/*.jpg
 
 time exiftool "-AllDates+=$deltaHMS" -verbose mapillary_sampled_video_frames/$FN/GH018150_000002.jpg
 # try use simplified gpx
