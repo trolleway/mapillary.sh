@@ -14,7 +14,7 @@ nogps_count=$(exiftool -q -q  -csv  -gpslatitude -gpslongitude  $1 | tail -n +2 
 echo nogps_count = $nogps_count
 #need spaces around brackets
 if [ "$nogps_count" -gt 0 ]; then
-	echo 'There are some images withouth GPS positon in input folder. To not mistake folder, Geotag it in JOSM or delete';
+	dialog --msgbox  'There are some images withouth GPS positon in input folder. To not mistake folder, Geotag it in JOSM or delete' 8 40 ;
 	echo $nogps_list;
 	exit 1;
 fi
@@ -24,7 +24,7 @@ nogps_count=$(exiftool  -q -q  -csv  -gpslatitude -gpslongitude  $1 | grep 'GPSL
 
 #need spaces around brackets
 if [ "$nogps_count" -eq 0 ]; then
-	echo 'There are all images withouth GPS positon in input folder. Geotag it in JOSM';
+	dialog --msgbox  'There are all images withouth GPS positon in input folder. Geotag it in JOSM' 8 40 ;
 
 	exit 1;
 fi
