@@ -24,6 +24,8 @@ bash mijia360_geosync.sh ${FILE}
 read -n 1 -s -r -p "Press any key to continue"
 }
 
+#---
+
 process_and_upload() {
 dialog --title "Choose any file in folder" --fselect ~ 30 60
 FILE=$(dialog --stdout --title "Choose folder with JPG" --fselect $HOME/ 14 48)
@@ -199,6 +201,25 @@ bash gopro_video.sh $FILE $ANGLE $USERNAME
 read -n 1 -s -r -p "Press any key to continue"
 }
 
+#---
+mp4_merge() {
+dialog --title "Choose any file in folder" --fselect ~ 30 60
+FILE=$(dialog --stdout --title "Choose any file in folder with MP4" --fselect $HOME/ 14 48)
+echo "${FILE} file chosen."
+
+
+if   [ -d "${FILE}" ]
+then echo 'dir';
+elif [ -f "${FILE}" ]
+then FILE=$(dirname $FILE);
+else echo "${FILE} is not valid";
+     
+fi
+
+bash mp4_merge.sh ${FILE}
+read -n 1 -s -r -p "Press any key to continue"
+}
+
 
 
 while true
@@ -214,6 +235,7 @@ $DIALOG --clear --title "Select operation" \
         "process_and_upload" "process_and_upload images to Mapillary, set angle and username" \
         "xiaomi360_logo" "Overlay logo on Xiaomi360 images" \
         "gopro_video" "GoPro video process_and_upload" \
+        "mp4_merge" "GoPro video merge" \
         "exit"  "Exit" 2> $tempfile
 
 retval=$?
@@ -231,6 +253,7 @@ case $retval in
         process_and_upload) process_and_upload;;
         xiaomi360_logo) xiaomi360_logo;;
         gopro_video) gopro_video;;
+        mp4_merge) mp4_merge;;
         exit) exit;;
     esac;;
   1)

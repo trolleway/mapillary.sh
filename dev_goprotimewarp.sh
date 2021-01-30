@@ -2,7 +2,7 @@ FN="GH018642"
 
 
 
-DIR="/data/20210106_PERESLAVL"
+DIR="/data/20210110"
 
 USERNAME="trolleway"
 ANGLE=0
@@ -23,29 +23,106 @@ time ffmpeg -y -i $DIR/$FN.mp4 -vcodec libx264 -vf 'scale=640:trunc(ow/a/2)*2' -
 #simplify gpx for reduce jagged points
 gpsbabel -r -i gpx  -f $DIR/$FN.gpx -x simplify,lenght,error=0.001 -o gpx -F $DIR/$FN-simplify.gpx
 
+#---- start here
+find $DIR -type f -iname "*.mp4" | parallel  exiftool -Rate  -q -q  -csv   {} 
+
+time mapillary_tools video_process  --video_import_path "$DIR" \
+--user_name $USERNAME --advanced --video_duration_ratio $RATIO --device_make GoPro --device_model "HERO8 Black" \
+--video_sample_interval $INTERVAL --geotag_source "gopro_videos" --geotag_source_path "$DIR" \
+ --use_gps_start_time --interpolate_directions --offset_angle $ANGLE 
+ 
+ 
+exiftool  -overwrite_original -progress "-gps*=" -ImageDescription= -r $DIR/mapillary_sampled_video_frames
+
+# georefrence in JOSM here to gpx track from external device. GoPro timewarp tracks has too low time presision
+
+FN=GH011013
+exiftool  -overwrite_original -progress "-gps*=" -ImageDescription=  $DIR/mapillary_sampled_video_frames/$FN/*.jpg
+
+time exiftool  -overwrite_original -progress -geotag  $DIR/osmand.gpx \
+-geosync="2021:01:10 10:38:44@13:36:59" \
+-geosync="2021:01:10 10:42:48@13:40:35" \
+-geosync="2021:01:10 10:55:21@13:51:03" \
+-geosync="2021:01:10 11:00:08@13:55:05" \
+-geosync="2021:01:10 11:09:44@14:03:24" \
+$DIR/mapillary_sampled_video_frames/$FN/*.jpg
+
+
+
+
+
+FN=GH011014
+exiftool  -overwrite_original -progress "-gps*=" -ImageDescription=  $DIR/mapillary_sampled_video_frames/$FN/*.jpg
+time exiftool  -overwrite_original -progress -geotag  $DIR/osmand.gpx \
+-geosync="2021:01:10 11:22:53@14:16:34" \
+-geosync="2021:01:10 11:35:39@14:27:37" \
+-geosync="2021:01:10 11:40:04@14:31:51" \
+-geosync="2021:01:10 11:43:16@14:34:24" \
+-geosync="2021:01:10 12:33:36@15:20:43" \
+$DIR/mapillary_sampled_video_frames/$FN/*.jpg
+
+
+
+FN=GH011015
+exiftool  -overwrite_original -progress "-gps*=" -ImageDescription=  $DIR/mapillary_sampled_video_frames/$FN/*.jpg
+time exiftool  -overwrite_original -progress -geotag  $DIR/osmand.gpx \
+-geosync="2021:01:10 12:50:46@15:48:49" \
+-geosync="2021:01:10 12:57:32@15:54:55" \
+$DIR/mapillary_sampled_video_frames/$FN/*.jpg
+
+
+
+FN=GH011016
+exiftool  -overwrite_original -progress "-gps*=" -ImageDescription=  $DIR/mapillary_sampled_video_frames/$FN/*.jpg
+time exiftool  -overwrite_original -progress -geotag  $DIR/osmand.gpx \
+-geosync="2021:01:10 13:13:40@16:12:22" \
+-geosync="2021:01:10 13:16:45@16:14:56" \
+-geosync="2021:01:10 13:21:20@16:19:11" \
+-geosync="2021:01:10 13:23:23@16:20:44" \
+$DIR/mapillary_sampled_video_frames/$FN/*.jpg
+
+
+#-----
+
+
+
+time exiftool -progress -overwrite_original -r -ImageDescription= *.jpg
+
+time mapillary_tools process --advanced --rerun --import_path "$DIR/mapillary_sampled_video_frames/$FN" --user_name $USERNAME  --device_make "GoPro" --device_model "HERO8 Black"\
+ --interpolate_directions --offset_angle $ANGLE
+
+time mapillary_tools upload --import_path "$DIR/mapillary_sampled_video_frames/$FN"
+
+# --geotag_source "exif" --overwrite_all_EXIF_tags \
+
+#----------------
+
+#manual georefrence gopro timewarp by 4 points
+
+FN=GH010842
+exiftool  -overwrite_original -progress "-gps*=" -ImageDescription=  $DIR/mapillary_sampled_video_frames/$FN/*.jpg
+time exiftool  -overwrite_original -progress -geotag  $DIR/osmand.gpx \
+-geosync="2021:01:08 13:13:07@$DIR/mapillary_sampled_video_frames/$FN/$FN_000170.jpg" \
+-geosync="2021:01:08 13:13:40@$DIR/mapillary_sampled_video_frames/$FN/$FN_000198.jpg" \
+-geosync="2021:01:08 13:16:46@$DIR/mapillary_sampled_video_frames/$FN/$FN_000298.jpg" \
+-geosync="2021:01:08 13:20:46@$DIR/mapillary_sampled_video_frames/$FN/$FN_000442.jpg" \
+-geosync="2021:01:08 13:24:30@$DIR/mapillary_sampled_video_frames/$FN/$FN_000565.jpg" \
+$DIR/mapillary_sampled_video_frames/$FN/*.jpg
+
+
+
 
 time mapillary_tools video_process  --video_import_path "$DIR" \
 --user_name $USERNAME --advanced --video_duration_ratio $RATIO --device_make GoPro --device_model "HERO8 Black" \
 --video_sample_interval $INTERVAL --geotag_source "gopro_videos" --geotag_source_path "$DIR" \
  --use_gps_start_time --interpolate_directions --offset_angle $ANGLE 
 
-# georefrence in JOSM here to gpx track from external device. GoPro timewarp tracks has too low time presision
-
-time exiftool -progress -overwrite_original -r -ImageDescription= *.jpg
-
-time mapillary_tools process --advanced --rerun --import_path "$DIR/mapillary_sampled_video_frames" --user_name $USERNAME  --device_make "GoPro" --device_model "HERO8 Black"\
- --interpolate_directions --offset_angle $ANGLE
-
-time mapillary_tools upload --import_path "$DIR/mapillary_sampled_video_frames"
-
-# --geotag_source "exif" --overwrite_all_EXIF_tags \
-
 
 
 time exiftool -progress -overwrite_original -r -ImageDescription= *.jpg
-
 time mapillary_tools process --advanced --rerun --import_path "${PWD}" --user_name $USERNAME  --device_make "GoPro" --device_model "HERO8 Black"\
  --interpolate_directions --offset_angle $ANGLE
+
 
 
 time mapillary_tools process_and_upload --advanced --rerun --import_path "${PWD}" --user_name $USERNAME  --device_make "GoPro" --device_model "HERO8 Black"\
