@@ -234,7 +234,7 @@ $DIALOG --clear --title "Select operation" \
         "xiaomi360_geotag" "Geotag folder Xiaomi360 images with gpx track" \
         "process_and_upload" "process_and_upload images to Mapillary, set angle and username" \
         "xiaomi360_logo" "Overlay logo on Xiaomi360 images" \
-        "gopro_video" "GoPro video process_and_upload" \
+        "gopro_video" "GoPro video process" \
         "mp4_merge" "GoPro video merge" \
         "exit"  "Exit" 2> $tempfile
 

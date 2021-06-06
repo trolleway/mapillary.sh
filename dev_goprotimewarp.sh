@@ -1,13 +1,100 @@
-FN="GH018642"
 
-
-
-DIR="/data/20210110"
+DIR="/data/20210109"
 
 USERNAME="trolleway"
 ANGLE=0
 INTERVAL=0.1 #0.1
 RATIO=15 #10
+
+find $DIR -type f -iname "*.mp4" | parallel  exiftool -Rate  -q -q  -csv   {} 
+
+time mapillary_tools video_process  --video_import_path "$DIR" \
+--user_name $USERNAME --advanced --video_duration_ratio $RATIO --device_make GoPro --device_model "HERO8 Black" \
+--video_sample_interval $INTERVAL --geotag_source "gopro_videos" --geotag_source_path "$DIR" \
+ --use_gps_start_time --interpolate_directions --offset_angle $ANGLE 
+ 
+ 
+gpsbabel -r -i gpx  -f $DIR/osmand.gpx -x simplify,lenght,error=0.001 -o gpx -F $DIR/osmand-simplify.gpx
+
+
+
+
+
+
+FN=GH011004
+#simplify gpx for reduce jagged points
+exiftool  -overwrite_original -progress "-gps*=" -ImageDescription=  $DIR/mapillary_sampled_video_frames/$FN/*.jpg
+rm -r $DIR/mapillary_sampled_video_frames/$FN/.mapillary
+time exiftool  -overwrite_original -progress -geotag  $DIR/osmand-simplify.gpx \
+-geosync="2021:01:09 10:55:46@13:50:00" \
+-geosync="2021:01:09 11:04:16@13:58:02" \
+-geosync="2021:01:09 11:18:23@14:09:47" \
+-geosync="2021:01:09 11:20:22@14:11:33" \
+-geosync="2021:01:09 11:27:32@14:17:54" \
+-geosync="2021:01:09 11:36:08@14:25:47" \
+$DIR/mapillary_sampled_video_frames/$FN/*.jpg
+
+
+
+FN=GH011005
+#simplify gpx for reduce jagged points
+exiftool  -overwrite_original -progress "-gps*=" -ImageDescription=  $DIR/mapillary_sampled_video_frames/$FN/*.jpg
+rm -r $DIR/mapillary_sampled_video_frames/$FN/.mapillary
+time exiftool  -overwrite_original -progress -geotag  $DIR/osmand-simplify.gpx \
+-geosync="2021:01:09 11:49:25@14:44:05" \
+-geosync="2021:01:09 11:50:59@14:45:49" \
+-geosync="2021:01:09 12:35:06@15:22:58" \
+-geosync="2021:01:09 12:46:35@15:33:56" \
+-geosync="2021:01:09 13:00:30@15:46:29" \
+-geosync="2021:01:09 13:15:14@15:59:01" \
+$DIR/mapillary_sampled_video_frames/$FN/*.jpg
+
+
+
+FN=GH011005_2
+#simplify gpx for reduce jagged points
+exiftool  -overwrite_original -progress "-gps*=" -ImageDescription=  $DIR/mapillary_sampled_video_frames/$FN/*.jpg
+rm -r $DIR/mapillary_sampled_video_frames/$FN/.mapillary
+time exiftool  -overwrite_original -progress -geotag  $DIR/osmand-simplify.gpx \
+-geosync="2021:01:09 13:18:13@14:46:27" \
+-geosync="2021:01:09 13:30:05@14:57:04" \
+$DIR/mapillary_sampled_video_frames/$FN/*.jpg
+
+
+FN=GH011006
+#simplify gpx for reduce jagged points
+exiftool  -overwrite_original -progress "-gps*=" -ImageDescription=  $DIR/mapillary_sampled_video_frames/$FN/*.jpg
+rm -r $DIR/mapillary_sampled_video_frames/$FN/.mapillary
+time exiftool  -overwrite_original -progress -geotag  $DIR/osmand-simplify.gpx \
+-geosync="2021:01:09 13:39:34@16:34:43" \
+-geosync="2021:01:09 13:46:04@16:40:23" \
+-geosync="2021:01:09 14:12:06@17:03:25" \
+-geosync="2021:01:09 14:18:13@17:07:53" \
+-geosync="2021:01:09 14:56:06@17:41:28" \
+$DIR/mapillary_sampled_video_frames/$FN/*.jpg
+
+
+FN=GH011009
+#simplify gpx for reduce jagged points
+exiftool  -overwrite_original -progress "-gps*=" -ImageDescription=  $DIR/mapillary_sampled_video_frames/$FN/*.jpg
+rm -r $DIR/mapillary_sampled_video_frames/$FN/.mapillary
+time exiftool  -overwrite_original -progress -geotag  $DIR/osmand-simplify.gpx \
+-geosync="2021:01:09 15:09:33@18:08:12" \
+-geosync="2021:01:09 15:20:34@18:17:54" \
+-geosync="2021:01:09 15:22:45@18:20:13" \
+-geosync="2021:01:09 15:34:41@18:30:30" \
+$DIR/mapillary_sampled_video_frames/$FN/*.jpg
+
+
+
+
+time mapillary_tools process --advanced --rerun --import_path "$DIR/mapillary_sampled_video_frames" --user_name $USERNAME  --device_make "GoPro" --device_model "HERO8 Black"\
+ --interpolate_directions --offset_angle $ANGLE
+
+time mapillary_tools upload --import_path "$DIR/mapillary_sampled_video_frames"
+
+exit 0
+
 
 #generate frames with datetime
 if [[ ! -f $DIR/$FN.gpx ]]
@@ -24,14 +111,6 @@ time ffmpeg -y -i $DIR/$FN.mp4 -vcodec libx264 -vf 'scale=640:trunc(ow/a/2)*2' -
 gpsbabel -r -i gpx  -f $DIR/$FN.gpx -x simplify,lenght,error=0.001 -o gpx -F $DIR/$FN-simplify.gpx
 
 #---- start here
-find $DIR -type f -iname "*.mp4" | parallel  exiftool -Rate  -q -q  -csv   {} 
-
-time mapillary_tools video_process  --video_import_path "$DIR" \
---user_name $USERNAME --advanced --video_duration_ratio $RATIO --device_make GoPro --device_model "HERO8 Black" \
---video_sample_interval $INTERVAL --geotag_source "gopro_videos" --geotag_source_path "$DIR" \
- --use_gps_start_time --interpolate_directions --offset_angle $ANGLE 
- 
- 
 exiftool  -overwrite_original -progress "-gps*=" -ImageDescription= -r $DIR/mapillary_sampled_video_frames
 
 # georefrence in JOSM here to gpx track from external device. GoPro timewarp tracks has too low time presision
@@ -79,6 +158,11 @@ time exiftool  -overwrite_original -progress -geotag  $DIR/osmand.gpx \
 -geosync="2021:01:10 13:16:45@16:14:56" \
 -geosync="2021:01:10 13:21:20@16:19:11" \
 -geosync="2021:01:10 13:23:23@16:20:44" \
+$DIR/mapillary_sampled_video_frames/$FN/*.jpg
+
+time exiftool  -overwrite_original -progress -geotag  $DIR/osmand.gpx \
+-geosync="2021:01:10 13:13:40@GH011016_000197.jpg" \
+-geosync="2021:01:10 13:23:23@GH011016_000531.jpg" \
 $DIR/mapillary_sampled_video_frames/$FN/*.jpg
 
 
