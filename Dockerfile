@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 #mapillary tools work under python2.7, so in ubuntu higher 18 is hard to install old python 
 
 ARG DEBIAN_FRONTEND=noninteractive
@@ -13,7 +13,7 @@ RUN apt-get install --yes wget tree
 
 # isntall mapillary_tools
 
-RUN apt-get install --yes python-pip
+RUN apt-get install --yes python3-pip
 RUN pip install git+https://github.com/mapillary/Piexif
 RUN pip install --upgrade git+https://github.com/mapillary/mapillary_tools
 RUN apt-get install --yes exiftool dialog whiptail
