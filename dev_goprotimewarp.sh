@@ -6,7 +6,7 @@ ANGLE=0
 INTERVAL=0.1 #0.1
 RATIO=15 #10
 
-find $DIR -type f -iname "*.mp4" | parallel  exiftool -Rate  -q -q  -csv   {} 
+exiftool -Rate  -q -q  -csv  $DIR/*.MP4
 
 time mapillary_tools video_process  --video_import_path "$DIR" \
 --user_name $USERNAME --advanced --video_duration_ratio $RATIO --device_make GoPro --device_model "HERO8 Black" \
