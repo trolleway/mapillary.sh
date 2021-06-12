@@ -1,5 +1,4 @@
 FROM ubuntu:20.04
-#mapillary tools work under python2.7, so in ubuntu higher 18 is hard to install old python 
 
 ARG DEBIAN_FRONTEND=noninteractive
 ARG APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=DontWarn
