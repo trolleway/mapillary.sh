@@ -1,5 +1,5 @@
 
-DIR="/data/20210109"
+DIR="/data/20210504"
 
 USERNAME="trolleway"
 ANGLE=0
@@ -18,6 +18,28 @@ gpsbabel -r -i gpx  -f $DIR/osmand.gpx -x simplify,lenght,error=0.001 -o gpx -F 
 
 
 
+
+
+
+FN=GH026471
+
+exiftool  -overwrite_original -progress "-gps*=" -ImageDescription=  $DIR/mapillary_sampled_video_frames/$FN/*.jpg
+rm -r $DIR/mapillary_sampled_video_frames/$FN/.mapillary
+time exiftool  -overwrite_original -progress -geotag  $DIR/osmand.gpx \
+-geosync="2021:05:04 07:22:17@09:50:32" \
+-geosync="2021:05:04 07:22:42@09:50:58" \
+-geosync="2021:05:04 07:40:17@10:08:33" \
+$DIR/mapillary_sampled_video_frames/$FN/*2.jpg
+
+FN=GH016471
+
+exiftool  -overwrite_original -progress "-gps*=" -ImageDescription=  $DIR/mapillary_sampled_video_frames/$FN/*.jpg
+rm -r $DIR/mapillary_sampled_video_frames/$FN/.mapillary
+time exiftool  -overwrite_original -progress -geotag  $DIR/osmand.gpx \
+-geosync="2021:05:04 06:57:10@09:51:58" \
+-geosync="2021:05:04 07:05:40@10:00:29" \
+-geosync="2021:05:04 07:18:39@10:13:27" \
+$DIR/mapillary_sampled_video_frames/$FN/*2.jpg
 
 
 
