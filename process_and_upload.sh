@@ -30,9 +30,9 @@ if [ "$nogps_count" -eq 0 ]; then
 fi
 
 
-mapillary_tools process   --user_name $3 --cutoff_distance 100 --cutoff_time 60 \
+mapillary_tools process   --cutoff_distance 100 --cutoff_time 60 \
 --interpolate_directions --offset_angle $2 --rerun --overwrite_EXIF_direction_tag "$1" 2> /dev/null  
 
-mapillary_tools upload --import_path "$1" --skip_subfolders --number_threads 4 --max_attempts 50 --advanced
+mapillary_tools upload   "$1"
 echo "End"  
   
