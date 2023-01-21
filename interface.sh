@@ -1,7 +1,7 @@
 #!/bin/sh
 
 mapillary_auth() {
-mapillary_tools --advanced authenticate
+mapillary_tools authenticate
 }
 
 xiaomi360_geotag() {
