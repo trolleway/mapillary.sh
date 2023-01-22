@@ -2,9 +2,6 @@
 
 # $1 - path to folder
 # $2 - angle 
-# $3 - mapillary username
-
-
 
 #If some files has gps tags, sone not has
 
