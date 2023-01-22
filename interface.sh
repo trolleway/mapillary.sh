@@ -70,36 +70,7 @@ esac
 
 ANGLE=$(cat $tempfile)
 
-# ----- username
-
-DIALOG=${DIALOG=dialog}
-tempfile=`tempfile 2>/dev/null` || tempfile=/tmp/test$$
-trap "rm -f $tempfile" 0 1 2 5 15
-
-$DIALOG --title "My input box" --clear \
-        --inputbox "Enter mapillary username\n
-You sholuld do mapillary_auth before:" 16 51 2> $tempfile
-
-retval=$?
-
-case $retval in
-  0)
-    echo "Input string is `cat $tempfile`";;
-  1)
-    echo "Cancel pressed.";;
-  255)
-    if test -s $tempfile ; then
-      cat $tempfile
-    else
-      echo "ESC pressed."
-	  return
-    fi
-    ;;
-esac
-
-USERNAME=$(cat $tempfile)
-
-bash process_and_upload.sh $FILE $ANGLE $USERNAME
+bash process_and_upload.sh $FILE $ANGLE
 read -n 1 -s -r -p "Press any key to continue"
 }
 
@@ -232,7 +203,7 @@ $DIALOG --clear --title "Select operation" \
         --menu "Select operation:" 20 81 8 \
         "mapillary_auth"  "Mapillary_tools auth" \
         "xiaomi360_geotag" "Geotag folder Xiaomi360 images with gpx track" \
-        "process_and_upload" "process_and_upload images to Mapillary, set angle and username" \
+        "process_and_upload" "process_and_upload images to Mapillary, set angle" \
         "xiaomi360_logo" "Overlay logo on Xiaomi360 images" \
         "gopro_video" "GoPro video process" \
         "mp4_merge" "GoPro video merge" \
