@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
 import argparse
-import os
+import os, shutil
+import time
 
 def browser_upload(filename):
 
@@ -12,7 +14,24 @@ def browser_upload(filename):
     from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
     from selenium.webdriver.remote.file_detector import LocalFileDetector
     from selenium.webdriver.support import expected_conditions as EC
-    driver = webdriver.Remote("http://selenium:4444/wd/hub", options=webdriver.ChromeOptions())
+    from selenium.webdriver.support.ui import WebDriverWait
+    
+    def set_chrome_options() -> None:
+        from selenium.webdriver.chrome.options import Options
+        """Sets chrome options for Selenium.
+        Chrome options for headless browser is enabled.
+        """
+        chrome_options = Options()
+        chrome_options.add_argument("--headless")
+        chrome_options.add_argument("--no-sandbox")
+        chrome_options.add_argument("--disable-dev-shm-usage")
+        chrome_prefs = {}
+        chrome_options.experimental_options["prefs"] = chrome_prefs
+        chrome_prefs["profile.default_content_settings"] = {"images": 2}
+        return chrome_options
+        
+    #driver = webdriver.Remote("http://selenium:4444/wd/hub", options=webdriver.ChromeOptions())
+    driver = webdriver.Chrome(options=set_chrome_options())
     driver.file_detector = LocalFileDetector()
 
     driver.get("https://www.nomerogram.ru/")
@@ -60,10 +79,20 @@ args = parser.parse_args()
 path = args.path
 assert os.path.isdir(path)
 
+dest_path = os.path.join(path,'nomerogram_uploaded')
+if not os.path.isdir(dest_path):
+    os.makedirs(dest_path)
+
 for dirpath, dnames, fnames in os.walk(path):
     for filename in fnames:
+    
+        
         if not filename.lower().endswith('jpg'): continue
+        if 'nomerogram_uploaded' in dirpath: continue
         print(filename)
         result = browser_upload(os.path.join(dirpath,filename))
-        print(result)
+        if result == True:
+            shutil.move(os.path.join(dirpath,filename),dest_path)
+        print('upload ok, wait')
+        time.sleep(15)
 
