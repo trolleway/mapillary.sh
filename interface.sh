@@ -95,6 +95,25 @@ bash logo360/overlay_logo.sh ${FILE}
 read -n 1 -s -r -p "Press any key to continue"
 }
 
+nomerogram_upload() {
+dialog --title "Choose any file in folder" --fselect ~ 30 60
+FILE=$(dialog --stdout --title "Choose any file in folder with JPG " --fselect $HOME/ 14 48)
+echo "${FILE} file chosen."
+
+
+if   [ -d "${FILE}" ]
+then echo 'dir';
+elif [ -f "${FILE}" ]
+then FILE=$(dirname $FILE);
+else echo "${FILE} is not valid";
+     
+fi
+
+
+bash python3 nomerogram.py --path ${FILE}
+read -n 1 -s -r -p "Press any key to continue"
+}
+
 
 gopro_video() {
 dialog --title "Choose any file in folder" --fselect ~ 30 60
@@ -207,6 +226,7 @@ $DIALOG --clear --title "Select operation" \
         "xiaomi360_logo" "Overlay logo on Xiaomi360 images" \
         "gopro_video" "GoPro video process" \
         "mp4_merge" "GoPro video merge" \
+        "nomerogram_upload" "Nomerogram.ru upload" \
         "exit"  "Exit" 2> $tempfile
 
 retval=$?
@@ -225,6 +245,7 @@ case $retval in
         xiaomi360_logo) xiaomi360_logo;;
         gopro_video) gopro_video;;
         mp4_merge) mp4_merge;;
+        nomerogram_upload) nomerogram_upload;;
         exit) exit;;
     esac;;
   1)

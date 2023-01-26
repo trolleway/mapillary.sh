@@ -3,8 +3,7 @@ FROM ubuntu:20.04
 ARG DEBIAN_FRONTEND=noninteractive
 ARG APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=DontWarn
 
-RUN apt-get update && apt-get install --no-install-recommends -y \
-git wget tree python3-pip exiftool dialog whiptail imagemagick parallel jq curl gpsbabel ffmpeg gnupg2 
+RUN apt-get update && apt-get install --no-install-recommends -y git wget tree python3-pip exiftool dialog whiptail imagemagick parallel  jq curl gpsbabel ffmpeg
 
 
 #reverse geocoding for youtube timelapse: jq curl gpsbabel ffmpeg
@@ -22,7 +21,7 @@ RUN chmod  --recursive 777 /mapillary.sh
 RUN pip3 install selenium
 
 # Adding trusting keys to apt for repositories
-
+RUN apt-get install -y gnupg2
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
 
 # Adding Google Chrome to the repositories
