@@ -1,8 +1,9 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 import argparse
 import os, shutil
+from tqdm import trange, tqdm
 import time
 
 def browser_upload(filename):
@@ -45,7 +46,7 @@ def browser_upload(filename):
     s.send_keys(filename)
     btn = driver.find_element(By.XPATH,"//button[@aria-label='upload']")
     btn.click()
-    print('uploaded, wait for refresh page')
+    # uploaded, wait for refresh page
     WebDriverWait(driver, 6).until(EC.presence_of_element_located((By.XPATH, "//h3[contains(text(),'Загруж')]")))
     
     result = 'Загруж' in driver.page_source
@@ -83,16 +84,27 @@ dest_path = os.path.join(path,'nomerogram_uploaded')
 if not os.path.isdir(dest_path):
     os.makedirs(dest_path)
 
+total = 0
 for dirpath, dnames, fnames in os.walk(path):
-    for filename in fnames:
-    
-        
+    for filename in fnames: 
         if not filename.lower().endswith('jpg'): continue
         if 'nomerogram_uploaded' in dirpath: continue
-        print(filename)
-        result = browser_upload(os.path.join(dirpath,filename))
-        if result == True:
-            shutil.move(os.path.join(dirpath,filename),dest_path)
-        print('upload ok, wait')
-        time.sleep(15)
+        total = total+1
+
+with tqdm(total=total) as pbar:
+    for dirpath, dnames, fnames in os.walk(path):
+        for filename in fnames: 
+            if not filename.lower().endswith('jpg'): continue
+            if 'nomerogram_uploaded' in dirpath: continue
+            
+            pbar.write(filename)
+            if not os.path.isfile(filename):
+                print('file already deleted, continue to next')
+                continue
+            result = browser_upload(os.path.join(dirpath,filename))
+            if result == True:
+                shutil.move(os.path.join(dirpath,filename),dest_path)
+            pbar.update(1)
+            for j in trange(15*4, desc='upload ok, pause between uploads'):
+                time.sleep(1/4)
 

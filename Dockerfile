@@ -15,7 +15,7 @@ RUN pip install --upgrade git+https://github.com/mapillary/mapillary_tools
 ADD https://api.github.com/repos/trolleway/mapillary.sh/git/refs/heads/master   mapillary.sh-ver.json
 #The API call will return different results when the head changes, invalidating the docker cache
 
-RUN git clone --recurse-submodules -b nomerogram https://github.com/trolleway/mapillary.sh.git
+RUN git clone --recurse-submodules  https://github.com/trolleway/mapillary.sh.git
 
 RUN chmod  --recursive 777 /mapillary.sh
 
