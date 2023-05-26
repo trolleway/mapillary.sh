@@ -69,7 +69,7 @@ def argparser_prepare():
     parser = argparse.ArgumentParser(description='Upload directory with images to nomerogram.ru',
             formatter_class=PrettyFormatter)
 
-    parser.add_argument('--path', dest='path', required=False, default=os.path.join(os.path.dirname(os.path.realpath(__file__)),'feeder','keep_direction'))
+    parser.add_argument('path',  default=os.path.join(os.path.dirname(os.path.realpath(__file__)),'feeder','keep_direction'))
 
 
     return parser
