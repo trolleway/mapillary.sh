@@ -1,7 +1,16 @@
-FROM ubuntu:20.04
+FROM ubuntu:focal
 
 ARG DEBIAN_FRONTEND=noninteractive
 ARG APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=DontWarn
+
+
+ARG uid=1000
+ARG gid=1000
+RUN groupadd -g $gid trolleway && useradd --home /home/trolleway -u $uid -g $gid trolleway  \
+  && mkdir -p /home/trolleway && chown -R trolleway:trolleway /home/trolleway
+RUN echo 'trolleway:user' | chpasswd
+
+
 
 RUN apt-get update && apt-get install --no-install-recommends -y \
 git wget tree python3-pip exiftool dialog whiptail imagemagick parallel jq curl gpsbabel ffmpeg gnupg2 
@@ -49,6 +58,7 @@ RUN unzip /tmp/chromedriver.zip chromedriver -d /usr/local/bin/
 # Set display port as an environment variable
 ENV DISPLAY=:99
 
+RUN python3 -m pip install mapillary_tools
 
 WORKDIR /mapillary.sh
 
