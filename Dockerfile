@@ -1,14 +1,14 @@
-FROM ubuntu:focal
+FROM ubuntu:latest
 
 ARG DEBIAN_FRONTEND=noninteractive
 ARG APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=DontWarn
 
 
-ARG uid=1000
-ARG gid=1000
-RUN groupadd -g $gid trolleway && useradd --home /home/trolleway -u $uid -g $gid trolleway  \
-  && mkdir -p /home/trolleway && chown -R trolleway:trolleway /home/trolleway
-RUN echo 'trolleway:user' | chpasswd
+#ARG uid=1000
+#ARG gid=1000
+#RUN groupadd -g $gid trolleway && useradd --home /home/trolleway -u $uid -g $gid trolleway  \
+#  && mkdir -p /home/trolleway && chown -R trolleway:trolleway /home/trolleway
+#RUN echo 'trolleway:user' | chpasswd
 
 
 
@@ -19,7 +19,7 @@ git wget tree python3-pip exiftool dialog whiptail imagemagick parallel jq curl 
 #reverse geocoding for youtube timelapse: jq curl gpsbabel ffmpeg
 
 ADD https://api.github.com/repos/mapillary/mapillary_tools/git/refs/heads/main   mapillary_tools-ver.json
-RUN pip install --upgrade git+https://github.com/mapillary/mapillary_tools
+RUN pip install --upgrade  --break-system-packages git+https://github.com/mapillary/mapillary_tools
 
 ADD https://api.github.com/repos/trolleway/mapillary.sh/git/refs/heads/master   mapillary.sh-ver.json
 #The API call will return different results when the head changes, invalidating the docker cache
